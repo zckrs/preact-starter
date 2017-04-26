@@ -2,6 +2,8 @@ const { join } = require('path');
 const ExtractText = require('extract-text-webpack-plugin');
 const setup = require('./setup');
 
+const babelOptions = require('./babel');
+
 const dist = join(__dirname, '../dist');
 const exclude = /(node_modules|bower_components)/;
 
@@ -25,14 +27,17 @@ module.exports = env => {
 			alias: {
 				// you may need `preact-compat` instead!
 				'react': 'preact/aliases',
-	 			'react-dom': 'preact/aliases'
+				'react-dom': 'preact/aliases'
 			}
 		},
 		module: {
 			rules: [{
 				test: /\.jsx?$/,
 				exclude: exclude,
-				use: 'babel-loader'
+				use: {
+					loader: 'babel-loader',
+					options: babelOptions(isProd)
+				}
 			}, {
 				test: /\.(sass|scss)$/,
 				loader: isProd ? ExtractText.extract({

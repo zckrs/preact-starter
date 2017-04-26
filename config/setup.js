@@ -8,7 +8,6 @@ const Copy = require('copy-webpack-plugin');
 const HTML = require('html-webpack-plugin');
 
 const uglify = require('./uglify');
-const babel = require('./babel');
 
 const root = join(__dirname, '..');
 
@@ -24,7 +23,6 @@ module.exports = isProd => {
 		new HTML({ template: 'src/index.html' }),
 		new webpack.LoaderOptionsPlugin({
 			options: {
-				babel,
 				postcss: [
 					require('autoprefixer')({ browsers: ['last 3 version'] })
 				]
@@ -33,8 +31,6 @@ module.exports = isProd => {
 	];
 
 	if (isProd) {
-		babel.presets.push('babili');
-
 		plugins.push(
 			new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
 			new webpack.optimize.UglifyJsPlugin(uglify),
